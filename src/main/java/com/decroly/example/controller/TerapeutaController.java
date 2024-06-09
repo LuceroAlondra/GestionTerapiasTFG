@@ -1,5 +1,6 @@
 package com.decroly.example.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/terapeuta")
+@CrossOrigin(origins = "*")
 public class TerapeutaController {
 	private final TerapeutaService terapeutaService;
 

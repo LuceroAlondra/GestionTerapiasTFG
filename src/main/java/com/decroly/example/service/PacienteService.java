@@ -7,15 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.decroly.example.exception.ResourceNotFoundException;
+import com.decroly.example.model.Especialidad;
 import com.decroly.example.model.Paciente;
 import com.decroly.example.model.Terapeuta;
+import com.decroly.example.model.TerapeutaPaciente;
+import com.decroly.example.repository.EspecialidadRepository;
 import com.decroly.example.repository.PacienteRepository;
+import com.decroly.example.repository.TerapeutaPacienteRepository;
+import com.decroly.example.repository.TerapeutaRepository;
 import com.decroly.example.utils.EmailValidator;
 
 @Service
 public class PacienteService {
 	@Autowired
     private PacienteRepository pacienteRepository;
+    private TerapeutaPacienteRepository terapeutaPacienteRepository;
+    
+    public PacienteService(TerapeutaPacienteRepository terapeutaPacienteRepository, PacienteRepository pacienteRepository) {
+	    this.terapeutaPacienteRepository = terapeutaPacienteRepository;
+	    this.pacienteRepository = pacienteRepository;
+	}
+
 
 	public Paciente crearPaciente(Paciente paciente) {
         if (!EmailValidator.validate(paciente.getEmail())) {
@@ -73,4 +85,14 @@ public class PacienteService {
                 .map(terapeutaPaciente -> terapeutaPaciente.getTerapeuta())
                 .collect(Collectors.toList());
     }
+
+    public String obtenerNombreEspecialidadPorPacienteId(Long pacienteId) {
+        List<TerapeutaPaciente> terapeutasAsignados = terapeutaPacienteRepository.findByPacienteId(pacienteId);
+        if (terapeutasAsignados.isEmpty()) {
+            throw new ResourceNotFoundException("No se encontraron terapeutas asignados para el paciente con ID: " + pacienteId);
+        }
+        Terapeuta terapeuta = terapeutasAsignados.get(0).getTerapeuta(); // Suponiendo que hay al menos un terapeuta
+        return terapeuta.getEspecialidad().getNombre();
+    }
+
 }

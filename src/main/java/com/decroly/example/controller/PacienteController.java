@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.decroly.example.dto.LoginRequest;
+import com.decroly.example.model.Especialidad;
 import com.decroly.example.model.Paciente;
 import com.decroly.example.model.Terapeuta;
 import com.decroly.example.service.PacienteService;
@@ -74,4 +75,14 @@ public class PacienteController {
 	        List<Terapeuta> terapeutas = pacienteService.obtenerTerapeutasPorPacienteId(id);
 	        return ResponseEntity.ok(terapeutas);
 	    }
+	 
+	 @GetMapping("/{pacienteId}/especialidad")
+	 public ResponseEntity<Map<String, String>> obtenerNombreEspecialidadPorPacienteId(@PathVariable Long pacienteId) {
+	     String nombreEspecialidad = pacienteService.obtenerNombreEspecialidadPorPacienteId(pacienteId);
+	     Map<String, String> response = new HashMap<>();
+	     response.put("nombre", nombreEspecialidad);
+	     return ResponseEntity.ok(response);
+	 }
+
+
 }

@@ -1,6 +1,7 @@
 package com.decroly.example.model;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,5 +27,6 @@ public class Paciente {
 	private String historiaClinica;
 	
 	@OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
     private List<TerapeutaPaciente> terapeutasAsignados;
 }
